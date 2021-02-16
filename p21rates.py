@@ -80,12 +80,7 @@ oppadj = oppadj.rename(columns = {'Opponent' : 'Opp'})
 oppadj = oppadj[['Opp', 'Position', 'deltapermin']]
 
 
-players21.round(1).to_csv(r'C:\Learning to Code\code\DailyFantasyCSV\boxscoreappdata.csv', index=False)
-
-
-# converting each player's total stats to per 36 minute rates. 
-# when computing the standard deviation i am assuming a poisson, which may need
-# to be reconsidered - negative binomial?
+# combining the player box score stats with today's slate
 
 playsmall = players21[['Player', 'MPG', 'Position', 'FPperMIN']].drop_duplicates()
 
