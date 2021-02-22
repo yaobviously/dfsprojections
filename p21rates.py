@@ -20,8 +20,8 @@ today = pd.to_datetime('today')
 datethreshold = today - pd.Timedelta(days=5)
 
 
-players21 = pd.read_csv(r'C:\Users\yaobv\Downloads\02-19-2021-nba-season-player-feed - NBA-PLAYER-FEED.csv')
-fctoday = pd.read_csv(r'C:\Users\yaobv\Downloads\todaysslatefeb20.csv')
+players21 = pd.read_csv(r'C:\Users\yaobv\Downloads\02-20-2021-nba-season-player-feed - NBA-PLAYER-FEED.csv')
+fctoday = pd.read_csv(r'C:\Users\yaobv\Downloads\draftkings_NBA_2021-02-22_players.csv')
 fctoday = fctoday.loc[fctoday['Proj Mins'] > 0.5]
 
 teampace = pd.read_csv(r'C:\Users\yaobv\Downloads\teampace - nbateamdata.csv')
@@ -59,24 +59,25 @@ starterdict = {'Y' : 1, 'N' : 0}
 
 players21['Starter'] = players21['Starter'].map(starterdict)
 
+
+# A dictionary to translate player names
+
+playerdict = {'Guillermo Hernangomez' : 'Willy Hernangomez', 'J.J. Redick' : 'JJ Redick',
+              'James Ennis' : 'James Ennis III', 'Robert Williams' : 'Robert Williams III',
+              'Marcus Morris' : 'Marcus Morris Sr.', 'DeAndre Bembry' : "DeAndre' Bembry",
+              'PJ Washington' : 'P.J. Washington', 'Raulzinho Neto' : 'Raul Neto', 
+              'Mohamed Bamba' : 'Mo Bamba', 'Bruce Brown Jr.' : 'Bruce Brown', 
+              'Danuel House' : 'Danuel House Jr.'
+              }
+players21.query("Team == 'Brooklyn'")['Player'].tail(60)
+playerdictreversal = {value:key for (key, value) in playerdict.items()}
+
+
 # Using the playerdict ensure the names on today's list of players match the 
 # names used in the main DataFrame
 
 fctoday['Player'] = fctoday['Player'].map(playerdict).fillna(fctoday['Player'])
 
-
-# A dictionary for player names
-
-playerdict = {'Guillermo Hernangomez' : 'Willy Hernangomez', 'J.J. Redick' : 'JJ Redick',
-              'James Ennis' : 'James Ennis III', 'Robert Williams' : 'Robert Williams III',
-              'Marcus Morris' : 'Marcus Morris Sr.', 'DeAndre Bembry' : "DeAndre' Bembry",
-              'PJ Washington' : 'P.J. Washington', 'Raulzinho Neto' : 'Raul Neto',
-              }
-
-playerdictreversal = {value:key for (key, value) in playerdict.items()}
-
-
-players21['Date'] = pd.to_datetime(players21['Date'])
 
 # Computing player fantasy points from box score totals
 
@@ -89,6 +90,7 @@ dbldbl['tot'] = dbldbl.sum(axis=1)
 players21['bonus'].loc[dbldbl['tot'] ==2] = 1.5
 players21['bonus'].loc[dbldbl['tot'] ==3] = 4.5
 
+# Creating new columns from raw box score data 
 
 players21['PlayerFP'] = players21['PTS'] + players21['A'] * 1.5 + players21['TOT'] * 1.25 + players21['ST'] * 2 + players21['BL'] * 2 + players21['3P'] * 0.5 + players21['TO'] * -0.5 + players21['bonus']
 players21['GameFP/36']= (players21['PlayerFP'] / players21['MIN'] * 36).round(1)
@@ -107,6 +109,11 @@ players21['percavg'] = players21.groupby('Player')['teamperc'].rolling(15, 3).me
 
 players21['rollingMin'] = players21.groupby('Player')['MIN'].transform(lambda x: x.rolling(5, 3).mean().round(1))
 
+# Exporting player data and today's slate to a github repository to update a 
+# simple plotting app
+
+players21.to_csv(r'C:\Learning to Code\code\ECDFApp/boxscoreappdata.csv')
+fctoday.to_csv(r'C:\Learning to Code\code\ECDFApp/slatetoday.csv')
 
 # Calculating how much each team depresses FP output versus expectation for 
 # every position. This isn't used in the projection model, but it's handy to
@@ -196,5 +203,4 @@ fctoday = fctoday.drop(columns = 'Team')
 fctoday['predTeamFP'] = results.predict(fctoday).round(1)
 
 fctoday[['Team_x', 'Opp', 'Oppper48', 'TeamFPavg', 'predTeamFP']].drop_duplicates()
-
 
