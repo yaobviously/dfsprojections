@@ -53,7 +53,7 @@ playersim("P.J. Washington", 8, 1)
 # Minutes Boost & Opponent Positional Adjustment as Values 
 
 fiftry = dict([(i, a) for i, a in zip(fctoday.Player, fctoday.MinDelta)])
-fiftry['P.J. Washington']
+
 # This is a dictonary of today's players that will receive the output of the 
 # PlayerSim function
 
@@ -91,7 +91,7 @@ condense = condense.fillna(1)
 
 def calculateboom(row):
     if row['Salary'] <= 4000:
-        boom = 26
+        boom = 25
     
     else:
         boom = (row['Salary'] * 5 / 1000) * 1.25
@@ -119,3 +119,4 @@ fctoday['Player'] = fctoday['Player'].map(playerdictreversal).fillna(fctoday['Pl
 fctoday.to_csv(r'C:\Users\yaobv\Downloads\tcagain.csv')
 
 fctoday[['Player', 'boom']].sort_values(by='boom', ascending=False).head(30)
+
