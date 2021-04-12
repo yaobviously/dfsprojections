@@ -18,7 +18,7 @@ import random
 # right, which this does pretty well. There are other ways of producing approximately correct distributions;
 # this function is not useful early in the season (I used a different one); the padding could easily be improved
 # using any number of groupings; interplayer correlations matter; game conditions affect player rate distributions
-# etc. This could be improved in any number of ways, but it does produce reasonably accurate projections and boom/bust
+# etc. This could be improved, but it does produce reasonably accurate projections and boom/bust
 # estimates.
 
 
