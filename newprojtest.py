@@ -17,7 +17,9 @@ import random
 # FP/36 and Minutes Played history. The challenge is getting the distributions in the tails approximately
 # right, which this does pretty well. There are other ways of producing approximately correct distributions;
 # this function is not useful early in the season (I used a different one); the padding could easily be improved
-# using any number of groupings, etc. But this isn't too bad and works quickly. I'm a newb.
+# using any number of groupings; interplayer correlations matter; game conditions affect player rate distributions
+# etc. This could be improved in any number of ways, but it does produce reasonably accurate projections and boom/bust
+# estimates.
 
 
 def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, altskew = -0.1):
