@@ -12,6 +12,12 @@ from scipy.stats import multivariate_normal
 import matplotlib.pyplot as plt
 import random
 
+
+# A function that creates a copula to correlate two skewed normal distributions fit to each player's
+# FP/36 and Minutes Played history. The challenge is getting the distributions in the tails approximately
+# right, which requires correlation. There are other ways of doing this but I wanted to learn how to
+# create a copula using code.  
+
 def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, altskew = -0.1):
     df_ = players21[players21['Player'] == player][['GameFP/36', 'MIN']]      
     df_ = df_.fillna(1)
@@ -66,15 +72,15 @@ def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, a
 correlated_non_normal('Derrick White', mindelta = 1, Salary = 8800, adjustment = 1, altskew = 1)
 
 
+# Creating a dictionary from a DataFrame created in the Players21 file. The function takes in 
 
 todaysplayers = {player: (mindelta, salary, newadj, minskew) for player, mindelta, salary, newadj, minskew in zip(fctoday.Player, fctoday.MinDelta, fctoday.Salary, fctoday.newadj, fctoday.adjpred_skew)}
 
+# Creating a destination dictionary
 
 simoutput = dict.fromkeys(todaysplayers)
 
-
-
-# FC Proj Minutes Output
+# A simple for loop to run every player in the dictionary through the function
 
 for player, details in todaysplayers.items():
     try: 
@@ -82,15 +88,19 @@ for player, details in todaysplayers.items():
     except:
         pass
     
+# Creating a DataFrame from the dictionary
 
 ordinaryproj = pd.DataFrame.from_dict(simoutput, orient = 'index', columns = ['my proj', 'bust', 'boom', '90_perc' ])
-
 ordinaryproj = round(ordinaryproj, 2)
 
 ordinaryproj[['bust', 'boom', '90_perc']].sort_values(by = 'boom', ascending=False).head(30)
 
+# At one point I used a TeamFP projection to normalize each team's output, but it's omitted here (for now)
+
 ordinaryproj.to_csv(r'C:\Users\yaobv\Downloads\projtoday.csv')
 
+# This is a sample of changes I might make based on news/other observations. Note I specify changes in the dictionary
+# so it's easy to rerun the slate of players.
 
 todaysplayers['Nikola Vucevic'] = (-0.55, 9100, 0.9, -0.57)
 todaysplayers['Zach LaVine'] = (-0.12, 8600, 0.93, -0.62)
