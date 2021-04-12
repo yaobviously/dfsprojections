@@ -73,7 +73,7 @@ def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, a
     
     return correlated_values.mean(), len(bust)/len(correlated_values), len(boom)/len(correlated_values), np.quantile(correlated_values, q = 0.9)
     
-correlated_non_normal('Derrick White', mindelta = 1, Salary = 8800, adjustment = 1, altskew = 1)
+correlated_non_normal('Derrick White', mindelta = 1, Salary = 4800, adjustment = 1, altskew = 1)
 
 
 # Creating a dictionary from a DataFrame created in the Players21 file. The function takes in 
