@@ -16,8 +16,11 @@ from scipy import stats
 boxscorestodate = r'C:\Users\yaobv\Downloads\04-10-2021-nba-season-player-feed - NBA-PLAYER-FEED.csv'
 fantasycruncher_today = r'C:\Users\yaobv\Downloads\draftkings_NBA_2021-04-08_players (1).csv'
 
+# There are ways of getting many of the features calculated below, but this began as an exercise in learning
+# how to use Pandas. From raw box score data I extract all sorts of useful features and use several models to 
+# create other ones. 
 
-# loading the model
+# loading the TeamFP model
 results = OLSResults.load("teamfp.pickle")
 
 # Loading the daily file
