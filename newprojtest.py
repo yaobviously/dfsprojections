@@ -96,7 +96,7 @@ ordinaryproj = round(ordinaryproj, 2)
 
 ordinaryproj[['bust', 'boom', '90_perc']].sort_values(by = 'boom', ascending=False).head(30)
 
-# At one point I used a TeamFP projection to normalize each team's output, but it's omitted here (for now)
+# At one point I used a TeamFP projection to normalize each player's output, but it's omitted here (for now)
 
 ordinaryproj.to_csv(r'C:\Users\yaobv\Downloads\projtoday.csv')
 
