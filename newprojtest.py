@@ -15,9 +15,10 @@ import random
 
 # A function that creates a copula to correlate two skewed normal distributions fit to each player's
 # FP/36 and Minutes Played history. The challenge is getting the distributions in the tails approximately
-# right, which this does pretty well. There are other ways of producing approximately right distributions;
+# right, which this does pretty well. There are other ways of producing approximately correct distributions;
 # this function is not useful early in the season (I used a different one); the padding could easily be improved
-# using my GMM labels (or positions, or any number of groupings), etc. This is an exercise!
+# using any number of groupings, etc. But this isn't too bad and works quickly. I'm a newb.
+
 
 def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, altskew = -0.1):
     df_ = players21[players21['Player'] == player][['GameFP/36', 'MIN']]      
