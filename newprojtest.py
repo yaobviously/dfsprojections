@@ -74,7 +74,7 @@ def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, a
     
 correlated_non_normal('Derrick White', mindelta = 1, Salary = 8800, adjustment = 1, altskew = 1)
 
-# A dictionary with each player and their corresponding inputs for the function
+# A dictionary of  each player expected to play today and their player-specific inputs for the function
 
 todaysplayers = {player: (mindelta, salary, newadj, minskew) for player, mindelta, salary, newadj, minskew in zip(fctoday.Player, fctoday.MinDelta, fctoday.Salary, fctoday.newadj, fctoday.adjpred_skew)}
 
