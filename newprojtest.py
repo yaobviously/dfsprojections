@@ -12,6 +12,15 @@ from scipy.stats import multivariate_normal
 import matplotlib.pyplot as plt
 import random
 
+
+# This is a function that uses a copula to correlate the output from two skewed normal distributions
+# fit to a player's historical FP/36 and Minutes Played. The trick is to get the distributions correct 
+# in the tails, which this does fairly well. There are many ways to get approximately correct distributions
+# and this way is imperfect. For example, the padding is (for now) minimal and non-specific; the function
+# does not account for interplayer correlations, or game environment, etc. But this does work and it
+# demonstrates that I can work with a few different data structures to produce reasonable numbers!
+
+
 def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, altskew = -0.1):
     df_ = players21[players21['Player'] == player][['GameFP/36', 'MIN']]      
     df_ = df_.fillna(1)
@@ -65,16 +74,16 @@ def correlated_non_normal(player, mindelta = 0, Salary = 5000, adjustment = 1, a
     
 correlated_non_normal('Derrick White', mindelta = 1, Salary = 8800, adjustment = 1, altskew = 1)
 
-
+# A dictionary with each player and their corresponding inputs for the function
 
 todaysplayers = {player: (mindelta, salary, newadj, minskew) for player, mindelta, salary, newadj, minskew in zip(fctoday.Player, fctoday.MinDelta, fctoday.Salary, fctoday.newadj, fctoday.adjpred_skew)}
 
+# A destination dictionary for the output of the function
 
 simoutput = dict.fromkeys(todaysplayers)
 
-
-
-# FC Proj Minutes Output
+# A simple for loop to send each player on today's slate to the function and assign the output
+# to the destination dictionary
 
 for player, details in todaysplayers.items():
     try: 
@@ -82,7 +91,8 @@ for player, details in todaysplayers.items():
     except:
         pass
 
-
+# Converting the destination dictionary into a DataFrame and sorting it. This step has included adjusting for
+# my model of a team's total output, but it isn't included in this version (yet)
 
 projections = pd.DataFrame.from_dict(simoutput).T
 projections.columns = ['proj', 'bust', 'boom', '90th']
@@ -93,6 +103,8 @@ projections[['bust', 'boom', '90th']].sort_values(by = 'boom', ascending=False).
 
 projections.to_csv(r'C:\Users\yaobv\Downloads\projtoday.csv')
 
+# This is an example of alterations I may make to players given news, etc. Note that I modify the values
+# in the original dictionary so that I can rerun the entire slate
 
 todaysplayers['Nikola Vucevic'] = (-0.55, 9100, 0.9, -0.57)
 todaysplayers['Zach LaVine'] = (-0.12, 8600, 0.93, -0.62)
